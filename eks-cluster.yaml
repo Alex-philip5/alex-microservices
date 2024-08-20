@@ -1,0 +1,26 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: eks-demo-cluster
+  region: ap-south-1
+
+vpc:
+  id: "vpc-000ef31ea1bf1b38b"
+  cidr: "10.0.0.0/22"
+  subnets:
+    public:
+      ap-south-1a: { id: subnet-059a9956fb112e7e7 }
+      ap-south-1b: { id: subnet-00578fa4e727527a5 }
+
+managedNodeGroups:
+  - name: eks-demo-cluster
+    instanceType: t3a.medium
+    labels: { role: builders }
+    minSize: 3
+    maxSize: 6
+    ssh: 
+      allow: true
+      publicKeyName: k8s-demo
+    tags:
+      Name: eks-demo
