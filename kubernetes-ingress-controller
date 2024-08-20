@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>kubernetes-ingress-controller | The official ngrok Ingress Controller for Kubernetes</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="kubernetes-ingress-controller" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The official ngrok Ingress Controller for Kubernetes" />
+<meta property="og:description" content="The official ngrok Ingress Controller for Kubernetes" />
+<link rel="canonical" href="https://ngrok.github.io/kubernetes-ingress-controller/" />
+<meta property="og:url" content="https://ngrok.github.io/kubernetes-ingress-controller/" />
+<meta property="og:site_name" content="kubernetes-ingress-controller" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="kubernetes-ingress-controller" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","description":"The official ngrok Ingress Controller for Kubernetes","headline":"kubernetes-ingress-controller","name":"kubernetes-ingress-controller","url":"https://ngrok.github.io/kubernetes-ingress-controller/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/kubernetes-ingress-controller/assets/css/style.css?v=15ecf3c8507f97e46cf93491ee6d5785e0ddc8bb">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/kubernetes-ingress-controller/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://ngrok.github.io/kubernetes-ingress-controller/">kubernetes-ingress-controller</a></h1>
+      
+
+      <p>
+  <a href="https://ngrok.com">
+    <img src="docs/assets/images/ngrok-blue-lrg.png" alt="ngrok Logo" width="300" url="https://ngrok.com" />
+  </a>
+  <a href="https://kubernetes.io/">
+  <img src="docs/assets/images/Kubernetes-icon-color.svg.png" alt="Kubernetes logo" width="150" />
+  </a>
+</p>
+
+<p>
+  <a href="https://github.com/ngrok/kubernetes-ingress-controller/actions?query=branch%3Amain+event%3Apush">
+      <img src="https://github.com/ngrok/kubernetes-ingress-controller/actions/workflows/ci.yaml/badge.svg" alt="CI Status" />
+  </a>
+  <a href="https://github.com/ngrok/kubernetes-ingress-controller/blob/master/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" />
+  </a>
+  <a href="#features-and-beta-status">
+    <img src="https://img.shields.io/badge/Status-Beta-orange.svg" alt="Status" />
+  </a>
+   <a href="#gateway-api-status">
+    <img src="https://img.shields.io/badge/Gateway_API-preview-rgba(159%2C122%2C234)" alt="Gateway API Preivew" />
+  </a>
+  <a href="https://ngrok.com/slack">
+    <img src="https://img.shields.io/badge/Join%20Our%20Community-Slack-blue" alt="Slack" />
+  </a>
+  <a href="https://twitter.com/intent/follow?screen_name=ngrokHQ">
+    <img src="https://img.shields.io/twitter/follow/ngrokHQ.svg?style=social&amp;label=Follow" alt="Twitter" />
+  </a>
+</p>
+
+<h1 id="ngrok-kubernetes-operator">ngrok Kubernetes Operator</h1>
+
+<p>Leverage <a href="https://ngrok.com/">ngrok</a> for your ingress in your Kubernetes cluster.  Instantly add load balancing, authentication, and observability to your services via ngrok Cloud Edge modules using Custom Resource Definitions (CRDs) and Kubernetes-native tooling. This repo contains both our <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Kubernetes Ingress Controller</a> and the <a href="https://gateway-api.sigs.k8s.io/">Kubernetes Gateway API</a></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><a href="#installation">Installation</a></td>
+      <td><a href="https://ngrok.com/docs/using-ngrok-with/k8s/">Getting Started</a></td>
+      <td><a href="#documentation">Documentation</a></td>
+      <td><a href="https://github.com/ngrok/kubernetes-ingress-controller/blob/main/docs/developer-guide/README.md">Developer Guide</a></td>
+      <td><a href="#known-issues">Known Issues</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="installation">Installation</h2>
+
+<h3 id="helm">Helm</h3>
+
+<blockquote>
+  <p><strong>Note</strong> We recommend using the Helm chart to install the controller for a better experience for upgrades.</p>
+</blockquote>
+
+<p>Add the ngrok Ingress Controller Helm chart:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm repo add ngrok https://ngrok.github.io/kubernetes-ingress-controller
+</code></pre></div></div>
+
+<p>Then, install the latest version (setting the appropriate values for your environment):</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">NAMESPACE</span><span class="o">=[</span>YOUR_K8S_NAMESPACE]
+<span class="nb">export </span><span class="nv">NGROK_AUTHTOKEN</span><span class="o">=[</span>AUTHTOKEN]
+<span class="nb">export </span><span class="nv">NGROK_API_KEY</span><span class="o">=[</span>API_KEY]
+
+helm <span class="nb">install </span>ngrok-ingress-controller ngrok/kubernetes-ingress-controller <span class="se">\</span>
+  <span class="nt">--namespace</span> <span class="nv">$NAMESPACE</span> <span class="se">\</span>
+  <span class="nt">--create-namespace</span> <span class="se">\</span>
+  <span class="nt">--set</span> credentials.apiKey<span class="o">=</span><span class="nv">$NGROK_API_KEY</span> <span class="se">\</span>
+  <span class="nt">--set</span> credentials.authtoken<span class="o">=</span><span class="nv">$NGROK_AUTHTOKEN</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Note</strong> The values for <code class="language-plaintext highlighter-rouge">NGROK_API_KEY</code> and <code class="language-plaintext highlighter-rouge">NGROK_AUTHTOKEN</code> can be found in your <a href="https://dashboard.ngrok.com/get-started/setup">ngrok dashboard</a> and are used by your ingress controller to authenticate with ngrok for configuring and running your network ingress traffic at the edge.</p>
+</blockquote>
+
+<p>For a more in-depth installation guide follow our step-by-step <a href="https://ngrok.com/docs/using-ngrok-with/k8s/">Getting Started</a> guide.</p>
+
+<h4 id="gateway-api-preview">Gateway API Preview</h4>
+
+<p>To install the developer preview of the gateway api we’ll make the following changes to the above instructions.</p>
+
+<p>Install the v1 gateway CRD before the helm installation.</p>
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply <span class="nt">-f</span> https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
+</code></pre></div></div>
+
+<p>Then, during the helm install set the experimental gateway flag.</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>helm <span class="nb">install </span>ngrok-ingress-controller ngrok/kubernetes-ingress-controller <span class="se">\</span>
+  <span class="nt">--namespace</span> <span class="nv">$NAMESPACE</span> <span class="se">\</span>
+  <span class="nt">--create-namespace</span> <span class="se">\</span>
+  <span class="nt">--set</span> credentials.apiKey<span class="o">=</span><span class="nv">$NGROK_API_KEY</span> <span class="se">\</span>
+  <span class="nt">--set</span> credentials.authtoken<span class="o">=</span><span class="nv">$NGROK_AUTHTOKEN</span> <span class="se">\</span>
+  <span class="nt">--set</span> <span class="nv">useExperimentalGatewayApi</span><span class="o">=</span><span class="nb">true</span>  <span class="c"># gateway preview</span>
+</code></pre></div></div>
+<h3 id="yaml-manifests">YAML Manifests</h3>
+
+<p>Apply the <a href="manifest-bundle.yaml">sample combined manifest</a> from our repo:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl apply <span class="nt">-n</span> ngrok-ingress-controller <span class="se">\</span>
+  <span class="nt">-f</span> https://raw.githubusercontent.com/ngrok/kubernetes-ingress-controller/main/manifest-bundle.yaml
+</code></pre></div></div>
+
+<p>For a more in-depth installation guide follow our step-by-step <a href="https://ngrok.com/docs/using-ngrok-with/k8s/">Getting Started</a> guide.</p>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The full documentation for the ngrok Ingress Controller can be found on our <a href="https://ngrok.com/docs/k8s/">k8s docs</a></p>
+
+<h2 id="known-issues">Known Issues</h2>
+
+<blockquote>
+  <p><strong>Note</strong></p>
+
+  <p>This project is currently in beta as we continue testing and receiving feedback. The functionality and CRD contracts may change. It is currently used internally at ngrok for providing ingress to some of our production workloads.</p>
+</blockquote>
+
+<ol>
+  <li>Current issues can be found in the GitHub issues. <a href="https://github.com/ngrok/kubernetes-ingress-controller/issues?q=is%3Aopen+is%3Aissue+label%3Abug">Known/suspected bugs</a> are labeled as <code class="language-plaintext highlighter-rouge">bug</code>.</li>
+</ol>
+
+<h2 id="support">Support</h2>
+
+<p>The best place to get support using the ngrok Kubernetes Operator is through the <a href="https://ngrok.com/slack">ngrok Slack Community</a>. If you find bugs or would like to contribute code, please follow the instructions in the <a href="./docs/CONTRIBUTING.md">contributing guide</a>.</p>
+
+<h2 id="license">License</h2>
+
+<p>The ngrok ingress controller is licensed under the terms of the MIT license.</p>
+
+<p>See <a href="./LICENSE.txt">LICENSE</a> for details.</p>
+
+
+      
+      <div class="footer border-top border-gray-light mt-5 pt-3 text-right text-gray">
+        This site is open source. <a href="https://github.com/ngrok/kubernetes-ingress-controller/edit/gh-pages/README.md">Improve this page</a>.
+      </div>
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: game-2048
+  name: game-2048
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: game-2048
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: game-2048
+    spec:
+      containers:
+      - image: alexwhen/docker-2048
+        name: docker-2048
+        ports:
+          - name: http
+            containerPort: 80
+        resources: {}
+status: {}

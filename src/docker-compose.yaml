@@ -1,0 +1,68 @@
+version: '3.3'
+
+services:
+
+    frontend:
+        build:
+            context: ./frontend
+        ports:
+            - "8080:8080"
+
+    shippingservice:
+        build:
+            context: ./shippingservice
+        ports:
+            - "50051:50051"
+
+    adservice:
+        build:
+            context: ./adservice
+        ports:
+            - "9555:9555"
+
+    checkoutservice:
+        build:
+            context: ./checkoutservice
+        ports:
+            - "5050:5050"
+
+    cartservice:
+        build:
+            context: ./cartservice/src
+        ports:
+            - "7070:7070"
+
+    currencyservice:
+        build:
+            context: ./currencyservice
+        ports:
+            - "8080:8080"
+
+    productcatalogservice:
+        build:
+            context: ./productcatalogservice
+        ports:
+            - "3550:3550"
+
+    paymentservice:
+        build:
+            context: ./paymentservice
+        ports:
+            - "50051:50051"
+
+    loadgenerator:
+        build:
+            context: ./loadgenerator
+
+    shoppingassistantservice:
+        build:
+            context: ./shoppingassistantservice
+        ports:
+            - "8080:8080"
+
+    recommendationservice:
+        build:
+            context: ./recommendationservice
+        ports:
+            - "8080:8080"
+             
